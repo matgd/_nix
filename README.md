@@ -106,7 +106,7 @@ home-manager switch --flake .#mateusz-linux
 To change your default shell to Fish installed via Nix:
 
 ```bash
-echo "\$(which fish)" | sudo tee -a /etc/shells
-chsh -s \$(which fish)
+echo "$(which fish)" | sudo tee -a /etc/shells
+chsh -s "$(which fish)"
 
 ```
