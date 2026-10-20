@@ -39,9 +39,35 @@
     git
   ];
 
+  # Enable and configure Zoxide (Smart cd)
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
   # Enable and configure Fish
   programs.fish = {
     enable = true;
+
+    # Fish Shell Aliases
+    shellAliases = {
+      # Modern CLI replacements
+      cat = "bat --style=plain";
+      
+      # Git & Tools shortcuts
+      gc = "git commit";
+      gs = "git status";
+      lg = "lazygit";
+      v = "nvim";
+
+      # Home Manager quick-rebuild shortcut
+      hms = "home-manager switch --flake /home/mateusz/Personal_Projects/_nix#mateusz-linux";
+    };
+
+    # Disable default greeting banner
+    interactiveShellInit = ''
+      set fish_greeting
+    '';
   };
 
   # Enable and configure Starship
