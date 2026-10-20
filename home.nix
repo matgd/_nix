@@ -10,6 +10,12 @@
   # Allow unfree packages globally
   nixpkgs.config.allowUnfree = true;
 
+  # MUST HAVE FOR NON-NIXOS LINUX DISTROS:
+  targets.genericLinux.enable = true;
+
+  # Automatically sync desktop applications to ~/.local/share/applications
+  xdg.enable = true;
+
   # Packages installed globally for the user profile
   home.packages = with pkgs; [
     # Shell
@@ -120,4 +126,8 @@
 
   # Enable Home Manager management
   programs.home-manager.enable = true;
+
+  # Menu entry
+  home.file.".local/share/applications/codium.desktop".source = 
+    "${pkgs.vscodium}/share/applications/codium.desktop";
 }
