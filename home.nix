@@ -1,5 +1,11 @@
-{ pkgs, username, homeDirectory, ... }:
+{ config, pkgs, username, homeDirectory, ... }:
 
+let
+  guiPackages = with pkgs; [
+    vscodium
+    obsidian
+  ];
+in
 {
   home.username = username;
   home.homeDirectory = homeDirectory;
@@ -17,25 +23,25 @@
   xdg.enable = true;
 
   # Packages installed globally for the user profile
-  home.packages = with pkgs; [
-    # Shell
+  home.packages = (with pkgs; [
+    # --- Shell ---
     fish
     starship  # for fish
 
-    # Version control related
+    # --- Version control related ---
     lazygit
     delta
 
-    # Editors
+    # --- Editors ---
     vim
     neovim
     helix
-    vscodium
+    # vscodium
 
-    # LLM stuff
+    # --- LLM stuff ---
     opencode  # CLI tool
 
-    # Utilities & Modern CLI replacements
+    # --- Utilities & Modern CLI replacements ---
     fzf
     ripgrep
     fd
@@ -43,7 +49,7 @@
     eza
     zoxide
     git
-  ];
+  ]) ++ guiPackages;
 
   # Enable and configure Zoxide (Smart cd)
   programs.zoxide = {
@@ -127,7 +133,21 @@
   # Enable Home Manager management
   programs.home-manager.enable = true;
 
-  # Menu entry
-  home.file.".local/share/applications/codium.desktop".source = 
-    "${pkgs.vscodium}/share/applications/codium.desktop";
+  # Entries in menu
+  home.file = builtins.listToAttrs (
+    builtins.concatLists (
+      map (pkg:
+        let
+          appsDir = "${pkg}/share/applications";
+        in
+        if builtins.pathExists appsDir then
+          map (file: {
+            name = ".local/share/applications/${file}";
+            value = { source = "${appsDir}/${file}"; };
+          }) (builtins.attrNames (builtins.readDir appsDir))
+        else
+          [ ]
+      ) guiPackages
+    )
+  );
 }
