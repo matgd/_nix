@@ -6,27 +6,14 @@ Works across Linux distributions (Linux Mint, Ubuntu, Arch, Fedora) and macOS (I
 
 ---
 
-## Included Tools
-
-* **Editors & IDEs:** `neovim`, `helix`, `vscodium`
-* **CLI AI Agent:** `opencode`
-* **Shell & Prompt:** `fish`, `starship`
-* **Navigation & Search:** `fzf`, `zoxide`, `ripgrep`, `fd`
-* **File & Terminal Utilities:** `eza`, `bat`, `lazygit`, `git`
-
----
-
 ## Prerequisites
 
 1. **Install Nix:**
-   ```bash
-   sh <(curl -L [https://nixos.org/nix/install](https://nixos.org/nix/install)) --daemon
-
+https://nixos.org/download/
 
 2. **Enable Flakes** (if not enabled globally):
-Add the following to `~/.config/nix/nix.conf`:
-```text
-experimental-features = nix-command flakes
+```shell
+mkdir -p ~/.config/nix/ && echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 ```
 
 ---
