@@ -9,7 +9,8 @@ Works across Linux distributions (Linux Mint, Ubuntu, Arch, Fedora) and macOS (I
 ## Prerequisites
 
 1. **Install Nix:**
-https://nixos.org/download/
+- https://nixos.org/download/
+- `sudo apt install nix-bin`
 
 2. **Enable Flakes** (if not enabled globally):
 ```shell
