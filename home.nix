@@ -57,6 +57,25 @@ in
     zoxide
     rofi
     git
+
+    # --- Fonts --- 
+    # https://nixos.wiki/wiki/Fonts
+    # :must have
+    nerd-fonts.cousine
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.noto
+    nerd-fonts.hack
+    # :optional
+    nerd-fonts.adwaita-mono
+    nerd-fonts.blex-mono
+    nerd-fonts.caskaydia-mono
+    nerd-fonts.fira-mono
+    nerd-fonts.gohufont
+    nerd-fonts.googlesanscode
+    nerd-fonts.iosevka
+    nerd-fonts.liberation
+    nerd-fonts.profont
+    nerd-fonts.ubuntu
   ]) ++ guiPackages;
 
   # Enable and configure Zoxide (Smart cd)
