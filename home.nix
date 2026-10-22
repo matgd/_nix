@@ -2,8 +2,14 @@
 
 let
   guiPackages = with pkgs; [
+    # --- Editors ---
     vscodium
+
+    # --- Notes ---
     obsidian
+
+    # --- Music ---
+    spotify
   ];
 in
 {
@@ -42,12 +48,14 @@ in
     opencode  # CLI tool
 
     # --- Utilities & Modern CLI replacements ---
+    htop
     fzf
     ripgrep
     fd
     bat
     eza
     zoxide
+    rofi
     git
   ]) ++ guiPackages;
 
@@ -68,6 +76,7 @@ in
       
       # Git & Tools shortcuts
       gc = "git commit";
+      gf = "git fetch";
       gs = "git status";
       lg = "lazygit";
       v = "nvim";
@@ -93,7 +102,7 @@ in
       add_newline = false;
       
       # Custom prompt format
-      format = "$directory$git_branch$git_status$character";
+      format = "$directory$git_branch$git_status$status$character";
 
       character = {
         success_symbol = "[➜](bold green)";
@@ -103,6 +112,15 @@ in
       directory = {
         truncation_length = 3;
         style = "bold cyan";
+      };
+
+      status = {
+        disabled = false;
+        format = "[$status]($style) ";
+        style = "bold red";
+        success_style = "bold green";
+        map_symbol = true;
+        recognize_signal_code = true;
       };
 
     git_branch = {
@@ -128,6 +146,7 @@ in
         conflicted = "=$count ";
       };
     };
+
   };
 
   # Enable Home Manager management

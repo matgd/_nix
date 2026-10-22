@@ -19,24 +19,7 @@ mkdir -p ~/.config/nix/ && echo "experimental-features = nix-command flakes" >> 
 
 ---
 
-## Initial Setup
-
-1. **Clone/Navigate to this repository:**
-```bash
-cd ~/Personal_Projects/_nix
-
-```
-
-
-2. **Initialize Git (required for Flakes):**
-```bash
-git init
-git add .
-
-```
-
-
-3. **Apply the configuration for your target system:**
+## Apply the configuration for your target system:
 * **Linux (Linux Mint, Ubuntu, Arch, Fedora, etc.):**
 ```bash
 nix run github:nix-community/home-manager -- switch --flake .#mateusz-linux
@@ -57,6 +40,15 @@ nix run github:nix-community/home-manager -- switch --flake .#mateusz-mac-intel
 
 ```
 
+## Not included
+
+- **[Zed](https://zed.dev/)**
+  - relies on GPU rendering, tricky with nix and when working on various types of GPUs
+- **[PyCharm](https://www.jetbrains.com/pycharm/)**
+  - long time since I used it, not necessary for now
+- **X11/Wayland specific tools/configs**
+  - many distros use Wayland by default now, some (e.g. Linux Mint) dospo not
+ 
 
 ---
 
