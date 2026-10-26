@@ -47,7 +47,7 @@ nix run github:nix-community/home-manager -- switch --flake .#mateusz-mac-intel
 - **[PyCharm](https://www.jetbrains.com/pycharm/)**
   - long time since I used it, not necessary for now
 - **X11/Wayland specific tools/configs**
-  - many distros use Wayland by default now, some (e.g. Linux Mint) dospo not
+  - many distros use Wayland by default now, some (e.g. Linux Mint) do not
  
 
 ---
