@@ -57,25 +57,6 @@ in
     zoxide
     rofi
     git
-
-    # --- Fonts --- 
-    # https://nixos.wiki/wiki/Fonts
-    # :must have
-    nerd-fonts.cousine
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.noto
-    nerd-fonts.hack
-    # :optional
-    nerd-fonts.adwaita-mono
-    nerd-fonts.blex-mono
-    nerd-fonts.caskaydia-mono
-    nerd-fonts.fira-mono
-    nerd-fonts.gohufont
-    nerd-fonts.googlesanscode
-    nerd-fonts.iosevka
-    nerd-fonts.liberation
-    nerd-fonts.profont
-    nerd-fonts.ubuntu
   ]) ++ guiPackages;
 
   # Enable and configure Zoxide (Smart cd)
@@ -92,7 +73,7 @@ in
     shellAliases = {
       # Modern CLI replacements
       cat = "bat --style=plain";
-      
+
       # Git & Tools shortcuts
       gc = "git commit";
       gf = "git fetch";
@@ -119,7 +100,7 @@ in
     # Custom Starship Settings (Optional)
     settings = {
       add_newline = false;
-      
+
       # Custom prompt format
       format = "$directory$git_branch$git_status$status$character";
 
@@ -152,7 +133,7 @@ in
         style = "bold yellow";
         # Wraps all git flags inside brackets e.g. [ ahead:1 | +1 !2 ?1 ]
         format = "([\\[ $all_status$ahead_behind\\]]($style) )";
-        
+
         # Explicit status indicators:
         ahead = "ahead:$count ";
         behind = "behind:$count ";
