@@ -2,8 +2,12 @@
 
 let
   guiPackages = with pkgs; [
+    # --- Workflow ---
+    # kitty  # won't work OOTB -> GPU drivers
+
     # --- Editors ---
     vscodium
+    # zed-editor  # won't work OOTB -> GPU drivers
 
     # --- Notes ---
     obsidian
@@ -33,6 +37,9 @@ in
     # --- Shell ---
     fish
     starship  # for fish
+
+    # -- Workflow --
+    zellij
 
     # --- Version control related ---
     lazygit
