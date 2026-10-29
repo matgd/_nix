@@ -42,12 +42,14 @@ nix run github:nix-community/home-manager -- switch --flake .#mateusz-mac-intel
 
 ## Not included
 
+- **kitty**
+  - relies on GPU rendering, tricky with nix and when working on various types of GPUs
 - **[Zed](https://zed.dev/)**
   - relies on GPU rendering, tricky with nix and when working on various types of GPUs
 - **[PyCharm](https://www.jetbrains.com/pycharm/)**
   - long time since I used it, not necessary for now
 - **X11/Wayland specific tools/configs**
-  - many distros use Wayland by default now, some (e.g. Linux Mint) do not
+  - many distros use Wayland by default now, some (e.g. Linux Mint) do not - I don't want to keep both types of configs
  
 
 ---
