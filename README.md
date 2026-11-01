@@ -9,8 +9,16 @@ Works across Linux distributions (Linux Mint, Ubuntu, Arch, Fedora) and macOS (I
 ## Prerequisites
 
 1. **Install Nix:**
-- https://nixos.org/download/
-- `sudo apt install nix-bin`
+
+Run the install script (Linux only) - it installs Nix and packages not included in `home.nix` via your system package manager (apt, dnf, or pacman):
+```bash
+./install_missing_nix_packages_with_system_package_manager.sh
+```
+Or install Nix manually for your distribution:
+- **Debian/Ubuntu/Mint:** `sudo apt install nix-bin`
+- **Fedora:** `sudo dnf install nix`
+- **Arch:** `sudo pacman -S nix`
+- **macOS:** https://nixos.org/download/
 
 2. **Enable Flakes** (if not enabled globally):
 ```shell
@@ -40,10 +48,18 @@ nix run github:nix-community/home-manager -- switch --flake .#mateusz-mac-intel
 
 ```
 
-## Not included
+## Included in system package manager script (Linux only for now)
+Some programs are not included in nix configuration due to pain points. for example kitty utilizes GPU.
+
+```bash
+./install_missing_nix_packages_with_system_package_manager.sh
+```
 
 - **kitty**
-  - relies on GPU rendering, tricky with nix and when working on various types of GPUs
+  - relies on GPU rendering, tricky with nix and when working on various types of GPUs  
+
+## Not included
+
 - **[Zed](https://zed.dev/)**
   - relies on GPU rendering, tricky with nix and when working on various types of GPUs
 - **[PyCharm](https://www.jetbrains.com/pycharm/)**
@@ -66,6 +82,9 @@ home-manager switch --flake .#mateusz-linux
 
 # On macOS (Apple Silicon)
 home-manager switch --flake .#mateusz-mac-arm
+
+# On macOS (Intel)
+home-manager switch --flake .#mateusz-mac-intel
 
 ```
 
