@@ -94,6 +94,7 @@ in
       gs = "git status";
       lg = "lazygit";
       v = "nvim";
+      nvm = "echo 'use fnm instead'";
 
       # Home Manager quick-rebuild shortcut
       hms = "home-manager switch --flake /home/mateusz/Personal_Projects/_nix#mateusz-linux";
