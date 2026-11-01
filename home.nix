@@ -54,6 +54,9 @@ in
     # --- LLM stuff ---
     opencode  # CLI tool
 
+    # --- Node version manager --- #
+    fnm  # (f)ast (n)ode (m)anager
+
     # --- Utilities & Modern CLI replacements ---
     htop
     fzf
@@ -65,6 +68,10 @@ in
     rofi
     git
   ]) ++ guiPackages;
+
+  xdg.configFile."fish/conf.d/fnm.fish".text = ''
+  fnm env --use-on-cd --shell fish | source
+  '';
 
   # Enable and configure Zoxide (Smart cd)
   programs.zoxide = {
