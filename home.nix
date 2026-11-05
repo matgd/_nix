@@ -1,4 +1,4 @@
-{ config, pkgs, username, homeDirectory, ... }:
+{ config, pkgs, username, homeDirectory, withGui ? true, ... }:
 
 let
   guiPackages = with pkgs; [
@@ -68,7 +68,7 @@ in
   xdg.enable = true;
 
   # Packages installed globally for the user profile
-  home.packages = cliPackages ++ guiPackages;
+  home.packages = cliPackages ++ (pkgs.lib.optionals withGui guiPackages);
 
   xdg.configFile."fish/conf.d/fnm.fish".text = ''
   fnm env --use-on-cd --shell fish | source
@@ -98,12 +98,39 @@ in
       nvm = "echo 'use fnm instead'";
 
       # Home Manager quick-rebuild shortcut
-      hms = "home-manager switch --flake /home/mateusz/Personal_Projects/_nix#mateusz-linux";
+      # (actual hms logic is defined in the function below)
     };
 
     # Disable default greeting banner
     interactiveShellInit = ''
       set fish_greeting
+    '';
+  };
+
+  # Home Manager rebuild: auto-detects OS/arch, supports `hms --no-gui`
+  programs.fish.functions.hms = {
+    body = ''
+      set -l flake /home/mateusz/Personal_Projects/_nix
+      if test (uname) = Darwin
+          set flake /Users/mateusz/Personal_Projects/_nix
+      end
+
+      set -l host mateusz-linux
+      switch (uname -m)
+          case arm64 aarch64
+              set host mateusz-mac-arm
+          case x86_64
+              if test (uname) = Darwin
+                  set host mateusz-mac-intel
+              end
+      end
+
+      if test "$argv[1]" = --no-gui
+          set host "$host-nogui"
+          set --erase argv[1]
+      end
+
+      home-manager switch --flake "$flake#$host" $argv
     '';
   };
 
@@ -169,7 +196,7 @@ in
   programs.home-manager.enable = true;
 
   # Entries in menu
-  home.file = builtins.listToAttrs (
+  home.file = if withGui then builtins.listToAttrs (
     builtins.concatLists (
       map (pkg:
         let
@@ -183,6 +210,5 @@ in
         else
           [ ]
       ) guiPackages
-    )
-  );
+    )) else { };
 }

@@ -12,7 +12,7 @@
   outputs = { nixpkgs, home-manager, ... }:
     let
       # Function to generate Home Manager configurations per system
-      mkHomeConfig = { system, username, homeDirectory }:
+      mkHomeConfig = { system, username, homeDirectory, withGui ? true }:
         let
           pkgs = import nixpkgs {
             inherit system;
@@ -21,32 +21,37 @@
         in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          extraSpecialArgs = { inherit username homeDirectory; };
+          extraSpecialArgs = { inherit username homeDirectory withGui; };
           modules = [ ./home.nix ];
         };
-    in
-    {
-      homeConfigurations = {
-        # Linux configuration (Linux Mint, Arch, Fedora, Debian, etc.)
-        "mateusz-linux" = mkHomeConfig {
-          system = "x86_64-linux";
-          username = "mateusz";
-          homeDirectory = "/home/mateusz";
-        };
 
-        # macOS Configuration (Apple Silicon - M1/M2/M3/M4)
-        "mateusz-mac-arm" = mkHomeConfig {
-          system = "aarch64-darwin";
+      # Generates both a full and a GUI-less configuration for a platform
+      mkPlatform = { name, system, homeDirectory }: {
+        "${name}" = mkHomeConfig {
+          inherit system homeDirectory;
           username = "mateusz";
-          homeDirectory = "/Users/mateusz";
         };
-
-        # macOS Configuration (Intel-based Macs)
-        "mateusz-mac-intel" = mkHomeConfig {
-          system = "x86_64-darwin";
+        "${name}-nogui" = mkHomeConfig {
+          inherit system homeDirectory;
           username = "mateusz";
-          homeDirectory = "/Users/mateusz";
+          withGui = false;
         };
       };
+    in
+    {
+      homeConfigurations =
+        (mkPlatform {
+          name = "mateusz-linux";
+          system = "x86_64-linux";
+          homeDirectory = "/home/mateusz";
+        }) // (mkPlatform {
+          name = "mateusz-mac-arm";
+          system = "aarch64-darwin";
+          homeDirectory = "/Users/mateusz";
+        }) // (mkPlatform {
+          name = "mateusz-mac-intel";
+          system = "x86_64-darwin";
+          homeDirectory = "/Users/mateusz";
+        });
     };
 }
