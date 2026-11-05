@@ -4,11 +4,11 @@ let
   guiPackages = with pkgs; [
     # --- Workflow ---
     rofi
-    # kitty  # won't work OOTB -> GPU drivers
+    kitty  # won't work OOTB -> GPU drivers
 
     # --- Editors ---
     vscodium
-    # zed-editor  # won't work OOTB -> GPU drivers
+    # zed-editor  # won't work OOTB -> GPU drivers + I prefer to standalone install due to the frequent updates
 
     # --- Notes ---
     obsidian
@@ -40,15 +40,15 @@ let
     fnm  # (f)ast (n)ode (m)anager
 
     # --- Utilities & Modern CLI replacements ---
-    htop
-    fzf
-    ripgrep
-    fd
     bat
     eza
-    zoxide
+    fd
+    fzf
     git
+    htop
+    ripgrep
     tldr
+    zoxide
   ];
 in
 {

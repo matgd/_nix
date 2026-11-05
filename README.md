@@ -49,19 +49,16 @@ nix run github:nix-community/home-manager -- switch --flake .#mateusz-mac-intel
 ```
 
 ## Included in system package manager script (Linux only for now)
-Some programs are not included in nix configuration due to pain points. for example kitty utilizes GPU.
+Some programs are not included in nix configuration due to pain points.
 
 ```bash
 ./install_missing_nix_packages_with_system_package_manager.sh
 ```
 
-- **kitty**
-  - relies on GPU rendering, tricky with nix and when working on various types of GPUs  
-
 ## Not included
 
 - **[Zed](https://zed.dev/)**
-  - relies on GPU rendering, tricky with nix and when working on various types of GPUs
+  - relies on GPU rendering, needs non-NixOS setup, has frequent updates - I prefer to install standalone
 - **[PyCharm](https://www.jetbrains.com/pycharm/)**
   - long time since I used it, not necessary for now
 - **X11/Wayland specific tools/configs**

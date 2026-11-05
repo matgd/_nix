@@ -3,7 +3,6 @@
 set -euo pipefail
 
 COMMON_PACKAGE_NAMES=(
-    "kitty"
 )
 
 APT_PACKAGE_NAMES=(
