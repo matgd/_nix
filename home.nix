@@ -3,6 +3,7 @@
 let
   guiPackages = with pkgs; [
     # --- Workflow ---
+    rofi
     # kitty  # won't work OOTB -> GPU drivers
 
     # --- Editors ---
@@ -14,6 +15,40 @@ let
 
     # --- Music ---
     spotify
+  ];
+  cliPackages = with pkgs; [
+    # --- Shell ---
+    fish
+    starship  # for fish
+
+    # -- Workflow --
+    zellij
+
+    # --- Version control related ---
+    lazygit
+    delta
+
+    # --- Editors ---
+    vim
+    neovim
+    helix
+
+    # --- LLM stuff ---
+    opencode  # CLI tool
+
+    # --- Node version manager --- #
+    fnm  # (f)ast (n)ode (m)anager
+
+    # --- Utilities & Modern CLI replacements ---
+    htop
+    fzf
+    ripgrep
+    fd
+    bat
+    eza
+    zoxide
+    git
+    tldr
   ];
 in
 {
@@ -33,42 +68,7 @@ in
   xdg.enable = true;
 
   # Packages installed globally for the user profile
-  home.packages = (with pkgs; [
-    # --- Shell ---
-    fish
-    starship  # for fish
-
-    # -- Workflow --
-    zellij
-
-    # --- Version control related ---
-    lazygit
-    delta
-
-    # --- Editors ---
-    vim
-    neovim
-    helix
-    # vscodium
-
-    # --- LLM stuff ---
-    opencode  # CLI tool
-
-    # --- Node version manager --- #
-    fnm  # (f)ast (n)ode (m)anager
-
-    # --- Utilities & Modern CLI replacements ---
-    htop
-    fzf
-    ripgrep
-    fd
-    bat
-    eza
-    zoxide
-    rofi
-    git
-    tldr
-  ]) ++ guiPackages;
+  home.packages = cliPackages ++ guiPackages;
 
   xdg.configFile."fish/conf.d/fnm.fish".text = ''
   fnm env --use-on-cd --shell fish | source
