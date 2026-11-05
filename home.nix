@@ -67,6 +67,7 @@ in
     zoxide
     rofi
     git
+    tldr
   ]) ++ guiPackages;
 
   xdg.configFile."fish/conf.d/fnm.fish".text = ''
