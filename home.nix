@@ -70,10 +70,6 @@ in
   # Packages installed globally for the user profile
   home.packages = cliPackages ++ (pkgs.lib.optionals withGui guiPackages);
 
-  xdg.configFile."fish/conf.d/fnm.fish".text = ''
-  fnm env --use-on-cd --shell fish | source
-  '';
-
   # Enable and configure Zoxide (Smart cd)
   programs.zoxide = {
     enable = true;
@@ -101,9 +97,9 @@ in
       # (actual hms logic is defined in the function below)
     };
 
-    # Disable default greeting banner
     interactiveShellInit = ''
-      set fish_greeting
+      set fish_greeting  # Disable default greeting banner, fnm startup
+      fnm env --use-on-cd --shell fish | source  # Set up 'fnm'
     '';
   };
 
