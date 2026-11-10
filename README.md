@@ -123,21 +123,6 @@ Some programs are not included in the Nix configuration due to platform pain poi
 ./install_missing_nix_packages_with_system_package_manager.sh
 ```
 
-### Not Included in Nix Flake
-
-* **[Zed](https://zed.dev/)**
-* Relies on GPU rendering, needs non-NixOS setup, has frequent updates - preferred to install standalone.
-
-
-* **[PyCharm](https://www.jetbrains.com/pycharm/)**
-* Not necessary for current workflow.
-
-
-* **X11/Wayland specific tools/configs**
-* Kept modular to ensure desktop-environment independence across Linux distros and macOS.
-
-
-
 ---
 
 ## Post-Install Tips
