@@ -1,43 +1,19 @@
-{ config, pkgs, username, homeDirectory, withGui ? true, ... }:
+{ config, pkgs, username, homeDirectory, profile ? "all", ... }:
 
 let
-  guiPackages = with pkgs; [
-    # --- Workflow ---
-    rofi
-    kitty  # won't work OOTB -> GPU drivers
-
-    # --- Editors ---
-    vscodium
-    # zed-editor  # won't work OOTB -> GPU drivers + I prefer to standalone install due to the frequent updates
-
-    # --- Notes ---
-    obsidian
-
-    # --- Music ---
-    spotify
-  ];
-  cliPackages = with pkgs; [
-    # --- Shell ---
+  # Packages common for both profiles (work and personal)
+  commonPackages = with pkgs; [
+    # --- Shell & Terminal ---
     fish
-    starship  # for fish
-
-    # -- Workflow --
+    starship
     zellij
-
-    # --- Version control related ---
     lazygit
     delta
-
-    # --- Editors ---
     vim
     neovim
     helix
-
-    # --- LLM stuff ---
-    opencode  # CLI tool
-
-    # --- Node version manager --- #
-    fnm  # (f)ast (n)ode (m)anager
+    opencode
+    fnm
 
     # --- Utilities & Modern CLI replacements ---
     bat
@@ -49,7 +25,26 @@ let
     ripgrep
     tldr
     zoxide
+
+    # --- Editors ---
+    vscodium
   ];
+
+  # Packages exclusively for the personal profile (@all) – e.g. gaming, GUI apps
+  personalPackages = with pkgs; [
+    mangohud
+    rofi
+    kitty
+    obsidian
+    spotify
+  ];
+
+  # Select packages based on the active profile
+  selectedPackages =
+    if profile == "work" then
+      commonPackages
+    else
+      commonPackages ++ personalPackages;
 in
 {
   home.username = username;
@@ -68,7 +63,31 @@ in
   xdg.enable = true;
 
   # Packages installed globally for the user profile
-  home.packages = cliPackages ++ (pkgs.lib.optionals withGui guiPackages);
+  home.packages = selectedPackages;
+
+  # MangoHud config (generated only in the "all" profile)
+  xdg.configFile."MangoHud/MangoHud.conf".text = pkgs.lib.optionalString (profile == "all") ''
+    # --- Style ---
+      horizontal
+      hud_no_margin
+      # background_alpha=0.4
+      # font_size=18
+
+      # --- Stats ---
+      # cpu_stats
+      # gpu_stats
+      # fps
+      # frame_timing=0
+
+      # --- FPS Limits & Presets ---
+      fps_limit=360,60
+
+      # Keybind to cycle through the fps limits
+      toggle_fps_limit=F1
+
+      # Stable frame pacing method (recommended 'early' for smooth 60fps or 'late' for low latency)
+      # fps_limit_method=early
+  '';
 
   # Enable and configure Zoxide (Smart cd)
   programs.zoxide = {
@@ -82,65 +101,73 @@ in
 
     # Fish Shell Aliases
     shellAliases = {
-      # Modern CLI replacements
       cat = "bat --style=plain";
-
-      # Git & Tools shortcuts
       gc = "git commit";
       gf = "git fetch";
       gs = "git status";
       lg = "lazygit";
       v = "nvim";
       nvm = "echo 'use fnm instead'";
-
-      # Home Manager quick-rebuild shortcut
-      # (actual hms logic is defined in the function below)
     };
 
     interactiveShellInit = ''
-      set fish_greeting  # Disable default greeting banner, fnm startup
+      set fish_greeting  # Disable default greeting banner
       fnm env --use-on-cd --shell fish | source  # Set up 'fnm'
-    '';
+    ''
   };
 
-  # Home Manager rebuild: auto-detects OS/arch, supports `hms --no-gui`
-  programs.fish.functions.hms = {
+  # Clean, dedicated commands instead of parsing flags in hms:
+  programs.fish.functions.hms-all = {
     body = ''
       set -l flake /home/mateusz/Personal_Projects/_nix
       if test (uname) = Darwin
           set flake /Users/mateusz/Personal_Projects/_nix
       end
 
-      set -l host mateusz-linux
+      set -l os_base linux
       switch (uname -m)
           case arm64 aarch64
-              set host mateusz-mac-arm
+              set os_base mac-arm
           case x86_64
               if test (uname) = Darwin
-                  set host mateusz-mac-intel
+                  set os_base mac-intel
               end
       end
 
-      if test "$argv[1]" = --no-gui
-          set host "$host-nogui"
-          set --erase argv[1]
+      echo "--> Switching to PERSONAL profile (all)..."
+      home-manager switch --flake "$flake#$os_base@all" $argv
+    ''
+  };
+
+  programs.fish.functions.hms-work = {
+    body = ''
+      set -l flake /home/mateusz/Personal_Projects/_nix
+      if test (uname) = Darwin
+          set flake /Users/mateusz/Personal_Projects/_nix
       end
 
-      home-manager switch --flake "$flake#$host" $argv
-    '';
+      set -l os_base linux
+      switch (uname -m)
+          case arm64 aarch64
+              set os_base mac-arm
+          case x86_64
+              if test (uname) = Darwin
+                  set os_base mac-intel
+              end
+      end
+
+      echo "--> Switching to WORK profile..."
+      home-manager switch --flake "$flake#$os_base@work" $argv
+    ''
   };
 
   # Enable and configure Starship
   programs.starship = {
     enable = true;
-    # Enables automatic integration for Fish shell
     enableFishIntegration = true;
 
-    # Custom Starship Settings (Optional)
     settings = {
       add_newline = false;
-
-      # Custom prompt format
       format = "$directory$git_branch$git_status$status$character";
 
       character = {
@@ -162,7 +189,7 @@ in
         recognize_signal_code = true;
       };
 
-    git_branch = {
+      git_branch = {
         symbol = " ";
         style = "bold purple";
         format = "on [$symbol$branch]($style) ";
@@ -170,10 +197,7 @@ in
 
       git_status = {
         style = "bold yellow";
-        # Wraps all git flags inside brackets e.g. [ ahead:1 | +1 !2 ?1 ]
         format = "([\\[ $all_status$ahead_behind\\]]($style) )";
-
-        # Explicit status indicators:
         ahead = "ahead:$count ";
         behind = "behind:$count ";
         diverged = "diverged:ahead:$ahead_count behind:$behind_count ";
@@ -185,14 +209,13 @@ in
         conflicted = "=$count ";
       };
     };
-
   };
 
   # Enable Home Manager management
   programs.home-manager.enable = true;
 
-  # Entries in menu
-  home.file = if withGui then builtins.listToAttrs (
+  # Desktop entries sync (only if the profile includes personal/GUI packages)
+  home.file = if profile == "all" then builtins.listToAttrs (
     builtins.concatLists (
       map (pkg:
         let
@@ -205,6 +228,6 @@ in
           }) (builtins.attrNames (builtins.readDir appsDir))
         else
           [ ]
-      ) guiPackages
+      ) personalPackages
     )) else { };
 }
