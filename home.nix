@@ -113,7 +113,7 @@ in
     interactiveShellInit = ''
       set fish_greeting  # Disable default greeting banner
       fnm env --use-on-cd --shell fish | source  # Set up 'fnm'
-    ''
+    '';
   };
 
   # Clean, dedicated commands instead of parsing flags in hms:
@@ -136,7 +136,7 @@ in
 
       echo "--> Switching to PERSONAL profile (all)..."
       home-manager switch --flake "$flake#$os_base@all" $argv
-    ''
+    '';
   };
 
   programs.fish.functions.hms-work = {
@@ -158,7 +158,7 @@ in
 
       echo "--> Switching to WORK profile..."
       home-manager switch --flake "$flake#$os_base@work" $argv
-    ''
+    '';
   };
 
   # Enable and configure Starship
