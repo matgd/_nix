@@ -65,32 +65,6 @@ in
   # Packages installed globally for the user profile
   home.packages = selectedPackages;
 
-  # MangoHud config (generated and managed only in the "all" profile)
-  xdg.configFile = pkgs.lib.optionalAttrs (profile == "all") {
-    "MangoHud/MangoHud.conf".text = ''
-      # --- Style ---
-      horizontal
-      hud_no_margin
-      # background_alpha=0.4
-      # font_size=18
-
-      # --- Stats ---
-      # cpu_stats
-      # gpu_stats
-      # fps
-      # frame_timing=0
-
-      # --- FPS Limits & Presets ---
-      fps_limit=360,240,165,144,120,60,40,30
-
-      # Keybind to cycle through the fps limits
-      toggle_fps_limit=Control_L+F1
-
-      # Stable frame pacing method (recommended 'early' for smoothness or 'late' for low latency)
-      # fps_limit_method=early
-    '';
-  };
-
   # Enable and configure Zoxide (Smart cd)
   programs.zoxide = {
     enable = true;
@@ -101,15 +75,17 @@ in
   programs.fish = {
     enable = true;
 
-    # Fish Shell Aliases
     shellAliases = {
       cat = "bat --style=plain";
+      v = "nvim";
+      nvm = "echo 'use fnm instead'";
+    };
+
+    shellAbbrs = {
       gc = "git commit";
       gf = "git fetch";
       gs = "git status";
       lg = "lazygit";
-      v = "nvim";
-      nvm = "echo 'use fnm instead'";
     };
 
     interactiveShellInit = ''
