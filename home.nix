@@ -7,36 +7,45 @@ let
     fish
     starship
     zellij
-    lazygit
-    delta
-    vim
-    neovim
-    helix
-    opencode
+
+    # --- Version managers ---
     fnm
+    uv
 
     # --- Utilities & Modern CLI replacements ---
     bat
+    delta
     eza
     fd
     fzf
     git
     htop
+    lazygit
+    opencode
     ripgrep
     tldr
     zoxide
 
     # --- Editors ---
+    vim
+    neovim
+    helix
     vscodium
+    obsidian
+
+    # --- Terminal ---
+    kitty
+
+    # --- Launcher ---
+    rofi
+
+    # --- Music ---
+    spotify
   ];
 
   # Packages exclusively for the personal profile (@all) – e.g. gaming, GUI apps
   personalPackages = with pkgs; [
     mangohud
-    rofi
-    kitty
-    obsidian
-    spotify
   ];
 
   # Select packages based on the active profile
